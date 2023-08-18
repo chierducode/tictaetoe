@@ -12,11 +12,38 @@ function checkVictory(player) {
     return checkLines(player) || checkColumns(player) || checkDiagonals(player);
 }
 
+
 function showVictory(player){
         let winnerMessage = document.getElementById("winnermessage");
         winnerMessage.innerText = `bien joué, c'est joueur ${player} qui a gagné (notamment)`;
+        resetButton = document.createElement("button");
+        resetButton.textContent = "démarrer une nouvelle partie";
+        document.body.appendChild(resetButton);
+        resetButton.addEventListener("click", event => {
+            resetGame();
+            removeResetButton();
+            winnerMessage.innerText = ``;
+          });
 
 }
+
+function resetGame(){
+    current_turn = 1;
+    can_play = true;
+    grid = [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ]
+    refreshGrid();
+}
+
+function removeResetButton(){
+    resetButton.parentNode.removeChild(resetButton);
+}
+
+
+
 
 function checkLine(line, player) {
     let current_line = grid[line];
@@ -86,6 +113,9 @@ function refreshGrid() {
             let column = j + 1;
             let id = "l" + line + "c" + column;
             let element = document.getElementById(id);
+            if(grid[i][j] === 0){
+                element.innerText = "";
+            }
             if(grid[i][j] === 1) {
                 element.innerText = "x";
             }   else if(grid[i][j] === 2) {
