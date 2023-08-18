@@ -1,4 +1,5 @@
 let current_turn = 0;
+let grid_item = document.querySelector("grid-item")
 let grid = [
     [0, 0, 0],
     [0, 0, 0],
@@ -11,8 +12,9 @@ function checkVictory(player) {
 }
 
 function showVictory(player){
-    let winnerMessage = document.getElementById("winnermessage");
-    winnerMessage.innerText = "bien joué notamment";
+        let winnerMessage = document.getElementById("winnermessage");
+        winnerMessage.innerText = `bien joué, c'est joueur ${player} qui a gagné (notamment)`;
+
 }
 
 function checkLine(line, player) {
@@ -66,6 +68,9 @@ function play(line, column, player) {
     // line = 0/1/2
     // column = 0/1/2
     // player = 1/2
+    if (checkVictory(player) === true ){
+        return;
+    }
     if (grid[line][column] === 0) {
         grid[line][column] = player;
         return true;
@@ -98,6 +103,7 @@ function makeMove(line, column) {
         refreshGrid();
         if (checkVictory(player)){
             showVictory(player);
+
         }
     }
 
@@ -112,6 +118,9 @@ for (let i = 0; i < 3; i++) {
         element.addEventListener("click", event => {
             makeMove(i, j);
         });
+        
     }
 }
+
+
 
