@@ -1,5 +1,6 @@
 let current_turn = 0;
 let can_play = true;
+let tie = false;
 let grid_item = document.querySelector("grid-item")
 let grid = [
     [0, 0, 0],
@@ -13,9 +14,13 @@ function checkVictory(player) {
 }
 
 
+
 function showVictory(player){
         let winnerMessage = document.getElementById("winnermessage");
         winnerMessage.innerText = `bien joué, c'est joueur ${player} qui a gagné (notamment)`;
+        if (tie === true){
+            winnerMessage.innerText = `égalité`;
+        }
         resetButton = document.createElement("button");
         resetButton.textContent = "démarrer une nouvelle partie";
         document.body.appendChild(resetButton);
@@ -28,8 +33,9 @@ function showVictory(player){
 }
 
 function resetGame(){
-    current_turn = 1;
+    current_turn = 0;
     can_play = true;
+    tie = false;
     grid = [
         [0, 0, 0],
         [0, 0, 0],
@@ -41,9 +47,6 @@ function resetGame(){
 function removeResetButton(){
     resetButton.parentNode.removeChild(resetButton);
 }
-
-
-
 
 function checkLine(line, player) {
     let current_line = grid[line];
@@ -134,11 +137,19 @@ function makeMove(line, column) {
     if (play(line, column, player)) {
         current_turn++;
         refreshGrid();
+        if (checkVictory(player) === false && current_turn === 9){
+            tie = true
+            can_play = false;
+            showVictory(player);
+
+        } 
+
         if (checkVictory(player)){
             can_play = false;
             showVictory(player);
 
-        }
+        } 
+
     }
 
 }
