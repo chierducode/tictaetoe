@@ -1,4 +1,5 @@
 let current_turn = 0;
+let can_play = true;
 let grid_item = document.querySelector("grid-item")
 let grid = [
     [0, 0, 0],
@@ -28,6 +29,8 @@ function checkLine(line, player) {
     return true;
 
 }
+
+
 
 function checkColumn(column, player) {
     for (let i = 0; i < 3; i++) {
@@ -68,9 +71,6 @@ function play(line, column, player) {
     // line = 0/1/2
     // column = 0/1/2
     // player = 1/2
-    if (checkVictory(player) === true ){
-        return;
-    }
     if (grid[line][column] === 0) {
         grid[line][column] = player;
         return true;
@@ -97,11 +97,15 @@ function refreshGrid() {
 }
 
 function makeMove(line, column) {
+    if (can_play === false){
+        return;
+    }
     let player = current_turn % 2 + 1;
     if (play(line, column, player)) {
         current_turn++;
         refreshGrid();
         if (checkVictory(player)){
+            can_play = false;
             showVictory(player);
 
         }
