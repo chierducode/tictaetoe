@@ -1,7 +1,10 @@
+let grid_container = document.querySelectorAll("grid-container")
 let current_turn = 0;
+const canvas = document.querySelector('#confetti-canvas');
 let can_play = true;
 let tie = false;
 let grid_item = document.querySelector("grid-item")
+let l1c1 = document.getElementById("l1c1")
 let grid = [
     [0, 0, 0],
     [0, 0, 0],
@@ -13,13 +16,50 @@ function checkVictory(player) {
     return checkLines(player) || checkColumns(player) || checkDiagonals(player);
 }
 
-
-
 function showVictory(player){
+
+    for(let i = 0; i<3; i++){
+        if (checkLine(i, player) === true){
+            document.getElementById("l" + (i+1) + "c1").style.color = "green";
+            document.getElementById("l" + (i+1)+ "c2").style.color = "green";
+            document.getElementById("l" + (i+1)+ "c3").style.color = "green";
+        }
+      }
+      for(let i = 0; i<3; i++){
+        if (checkColumn(i, player) === true){
+            document.getElementById("l1" + "c" + (i+1)).style.color = "green";
+            document.getElementById("l2" + "c" + (i+1)).style.color = "green";
+            document.getElementById("l3" + "c" + (i+1)).style.color = "green";
+        }
+      }
+      for(let i = 0; i<3; i++){
+        if (checkfirstDiagonal(i, player) === true){
+            document.getElementById("l1c1").style.color = "green";
+            document.getElementById("l2c2").style.color = "green";
+            document.getElementById("l3c3").style.color = "green";
+        }
+      }
+      for(let i = 0; i<3; i++){
+        if (checksecondDiagonal(i, player) === true){
+            document.getElementById("l3c1").style.color = "green";
+            document.getElementById("l2c2").style.color = "green";
+            document.getElementById("l1c3").style.color = "green";
+        }
+      }
         let winnerMessage = document.getElementById("winnermessage");
         winnerMessage.innerText = `bien joué, c'est joueur ${player} qui a gagné (notamment)`;
-        if (tie === true){
+        if (tie){
             winnerMessage.innerText = `égalité`;
+        }
+        if (tie === false){
+            var myConfetti = confetti.create(canvas, {
+                resize: true,
+                useWorker: true
+              });
+              myConfetti({
+                particleCount: 100,
+                spread: 160
+              });
         }
         resetButton = document.createElement("button");
         resetButton.textContent = "démarrer une nouvelle partie";
@@ -27,6 +67,7 @@ function showVictory(player){
         resetButton.addEventListener("click", event => {
             resetGame();
             removeResetButton();
+            cleanColor();
             winnerMessage.innerText = ``;
           });
 
@@ -48,6 +89,17 @@ function removeResetButton(){
     resetButton.parentNode.removeChild(resetButton);
 }
 
+function cleanColor(){
+    for(let i = 0; i<3; i++){
+        document.getElementById("l1" + "c" + (i+1)).style.color = "black";
+        document.getElementById("l2" + "c" + (i+1)).style.color = "black";
+        document.getElementById("l3"  + "c" + (i+1)).style.color = "black";
+        document.getElementById("l" + (i+1) + "c1").style.color = "black";
+        document.getElementById("l" + (i+1) + "c2").style.color = "black";
+        document.getElementById("l" + (i+1) + "c3").style.color = "black";
+    }
+}
+
 function checkLine(line, player) {
     let current_line = grid[line];
     for (let i = 0; i < 3; i++) {
@@ -59,8 +111,6 @@ function checkLine(line, player) {
     return true;
 
 }
-
-
 
 function checkColumn(column, player) {
     for (let i = 0; i < 3; i++) {
@@ -77,6 +127,21 @@ function checkDiagonals(player) {
     let second_diagonal = grid[0][2] === player && grid[1][1] === player && grid[2][0] === player;
     return first_diagonal || second_diagonal;
 }
+
+function checkfirstDiagonal(player) {
+   if (grid[0][0] === player && grid[1][1] === player && grid[2][2] === player){
+    return true;
+   }
+
+}
+
+function checksecondDiagonal(player) {
+    
+   if(grid[0][2] === player && grid[1][1] === player && grid[2][0] === player){
+    return true;
+   }
+}
+
 
 function checkLines(player) {
     for (let i = 0; i < 3; i++) {
@@ -147,11 +212,8 @@ function makeMove(line, column) {
         if (checkVictory(player)){
             can_play = false;
             showVictory(player);
-
         } 
-
     }
-
 }
 
 for (let i = 0; i < 3; i++) {
@@ -163,7 +225,6 @@ for (let i = 0; i < 3; i++) {
         element.addEventListener("click", event => {
             makeMove(i, j);
         });
-        
     }
 }
 

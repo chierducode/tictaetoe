@@ -1,24 +1,30 @@
 body {
     vertical-align:middle;
     text-align:center;
+    background-color:rgb(133, 227, 255);
 }
 
 .grid-container {
-  border-radius:5px;
+    border-radius:5px;
+    border-color: black;
     display: grid;
-    grid-template-columns: 100px 100px 100px;
-    padding: 10px;
-    justify-content: center;  
+    grid-template-columns: min-content min-content min-content;
+    justify-content: center;
+
 
 
   }
 
   .grid-item {
-
-    border: 2px solid rgba(0, 0, 0, 0.8);
-    padding: 20px;
+    border-radius: 5px;
+    padding: 30px;
     font-size: 30px;
     text-align: center;
+    width:20px;
+    height:20px;
+    background-color:white;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight:bold;
   } 
 
   .grid-item:hover {
